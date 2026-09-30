@@ -6,3 +6,14 @@ draw.text((50, 90), "Нет фото", fill="black")
 img.save("resources/picture.png")
 
 python -c "from PIL import Image, ImageDraw; img = Image.new('RGB', (200, 200), 'lightgray'); draw = ImageDraw.Draw(img); draw.text((50, 90), 'Нет фото', fill='black'); img.save('resources/picture.png')"
+
+
+canvas = tk.Canvas(self, bg=COLOR_BG, highlightthickness=0)
+canvas.pack(side="left", fill="both", expand=True, padx=10, pady=5)
+tk.Scrollbar(self, command=canvas.yview).pack(side="right", fill="y")
+canvas.configure(yscrollcommand=lambda *a: None)
+
+self.list_frame = tk.Frame(canvas, bg=COLOR_BG)
+canvas.create_window((0, 0), window=self.list_frame, anchor="nw")
+self.list_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+canvas.bind_all("<MouseWheel>", lambda e: canvas.yview_scroll(int(-e.delta / 120), "units"))
