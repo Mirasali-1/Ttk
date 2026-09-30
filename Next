@@ -1,30 +1,8 @@
-def pick_photo(self):
-    path = filedialog.askopenfilename(filetypes=[("Images", "*.jpg *.png *.jpeg")])
-    if path:
-        os.makedirs(PHOTOS_DIR, exist_ok=True)
-        dest = os.path.join(PHOTOS_DIR, os.path.basename(path))
-        if os.path.abspath(path) != os.path.abspath(dest):
-            shutil.copy(path, dest)
-        self.photo_path = os.path.relpath(dest, BASE_DIR)  # сохраняем относительный путь
-        self.photo_label.config(text=os.path.basename(dest))
+from PIL import Image, ImageDraw
 
-def load_thumb(self, path, size=(70, 70)):
-    print("productphoto из БД:", repr(path))
-    try:
-        if path and os.path.isabs(path):
-            full_path = path
-        elif path:
-            full_path = os.path.join(BASE_DIR, path)
-        else:
-            full_path = None
+img = Image.new("RGB", (200, 200), "lightgray")
+draw = ImageDraw.Draw(img)
+draw.text((50, 90), "Нет фото", fill="black")
+img.save("resources/picture.png")
 
-        print("Итоговый путь:", full_path, "существует:", full_path and os.path.exists(full_path))
-
-        img = Image.open(full_path) if full_path and os.path.exists(full_path) else Image.open(PLACEHOLDER)
-    except Exception as e:
-        print("ОШИБКА загрузки фото:", path, "->", e)
-        img = Image.new("RGB", size, "lightgray")
-    img.thumbnail(size)
-    photo = ImageTk.PhotoImage(img)
-    self.photo_cache.append(photo)
-    return photo
+python -c "from PIL import Image, ImageDraw; img = Image.new('RGB', (200, 200), 'lightgray'); draw = ImageDraw.Draw(img); draw.text((50, 90), 'Нет фото', fill='black'); img.save('resources/picture.png')"
